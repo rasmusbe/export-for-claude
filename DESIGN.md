@@ -34,12 +34,24 @@ are sent automatically, plain `fetch(relativeUrl)`).
   messages (concat `content`, `files_v2`, `files`, `attachments`,
   `sync_sources`).
 - Shared chat: `GET /api/chat_snapshots/{id}?rendering_mode=messages&render_all_tools=true`.
-- Incognito (`/new?incognito`): uuid never appears in the URL. A MAIN-world
-  script at `document_start` wraps `window.fetch`, matches
+- Incognito: current claude.ai puts the uuid in the URL after the first
+  message (`/chat/{uuid}?incognito`), so the normal URL parsing works; the chat
+  has `is_temporary: true` and an empty `name`, so the title falls back to
+  "Incognito chat" (English, not localised). The UI sends via the
+  `ConversationService/PerformAction` RPC, not `/completion`. For older UI
+  (`/new?incognito`, uuid never in the URL) a MAIN-world script at
+  `document_start` still wraps `window.fetch`, matches
   `^/api/organizations/(uuid)/chat_conversations/(uuid)/completion$` and posts
   `{orgId, convoId}` to the content script via `window.postMessage` (check
-  `e.source === window` and origin). Also posts route changes
-  (`pushState`/`replaceState`/`popstate`) so a stale id is cleared.
+  `e.source === window` and origin). This sniffing is only a fallback. It also
+  posts route changes (`pushState`/`replaceState`/`popstate`) so a stale id is
+  cleared.
+- Shared chat limitations: the snapshot has `viewer_can_access_files: false`,
+  `files: []` and `file_count > 0`; images appear only as content blocks
+  `{type:'image', source:null, file_uuid}`. Files cannot be exported, so the
+  Markdown shows `> Image (not available in shared chats)` (or `> Image: name`)
+  and `> N files not available in shared chats`. Created/Updated in a shared
+  export are the snapshot's times, not the original chat's.
 - Cowork / Claude Code remote sessions (UUIDv8 chat ids, i.e. char 14 is `8`,
   where the chat endpoint 404s; a non-v8 chat that 404s also tries the Cowork
   path, but only with ids the hook saw, never a full session listing):

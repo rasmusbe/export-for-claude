@@ -77,6 +77,8 @@ export interface Message {
   uploads: FileRef[];
   pastes: Paste[];
   syncSources: SyncSource[];
+  /** Placeholder lines for content that exists but could not be exported (shared chats). */
+  notes: string[];
 }
 
 export type ConversationKind = 'chat' | 'cowork';
@@ -94,9 +96,9 @@ export interface Conversation {
 }
 
 export function emptyMessage(role: Message['role'], time: string | null): Message {
-  return { role, time, blocks: [], images: [], files: [], uploads: [], pastes: [], syncSources: [] };
+  return { role, time, blocks: [], images: [], files: [], uploads: [], pastes: [], syncSources: [], notes: [] };
 }
 
 export function messageIsEmpty(m: Message): boolean {
-  return !m.blocks.length && !m.images.length && !m.files.length && !m.pastes.length && !m.syncSources.length;
+  return !m.blocks.length && !m.images.length && !m.files.length && !m.pastes.length && !m.syncSources.length && !m.notes.length;
 }

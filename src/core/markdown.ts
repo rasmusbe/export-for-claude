@@ -74,11 +74,8 @@ function stepLines(items: Block[], cowork: boolean, summary: string): string {
   const lines: string[] = [];
   if (summary) lines.push(`> ${summary}`, '>');
   for (const b of items) {
-    if (b.type === 'thinking') {
-      if (!b.summary) continue;
-      const [first, ...rest] = b.summary.split('\n');
-      lines.push(`> - ${first}${rest.map((l) => `\n>   ${l}`).join('')}`);
-    } else if (b.type === 'tool_use') {
+    // Thinking only contributes the summary line above, not a list item.
+    if (b.type === 'tool_use') {
       if (!cowork && b.name === 'web_fetch') {
         const { title, url, domain } = webFetchInfo(items, b);
         const label = domain ? `${title} (${domain})` : title;
@@ -178,6 +175,7 @@ function renderAttachments(msg: Message): string {
   let out = '';
   for (const img of msg.images) out += `![${img.name}](${img.url})\n\n`;
   for (const f of msg.files) out += `> File: ${f}\n\n`;
+  for (const n of msg.notes) out += `${n}\n\n`;
   for (const p of msg.pastes) {
     const fence = fenceFor(p.text);
     out += `${fence}text\n${p.text}${p.text.endsWith('\n') ? '' : '\n'}${fence}\n\n`;
@@ -243,7 +241,7 @@ export function renderMessageBody(msg: Message, ctx: Ctx): string {
         }
       }
 
-      const hasSteps = items.some((b) => b.type === 'thinking' || b.type === 'tool_use');
+      const hasSteps = items.some((b) => b.type === 'tool_use');
       if (hasSteps) {
         parts.push(stepLines(items, cowork, summary));
         if (!cowork) {

@@ -14,11 +14,12 @@ export interface NormaliseChatOptions {
 export function normaliseChat(data: Json, opts: NormaliseChatOptions): Conversation {
   const raw: RawChatMessage[] = Array.isArray(data.chat_messages) ? data.chat_messages : [];
   const branch = mergeSameSender(selectBranch(raw, data.current_leaf_message_uuid));
-  const messages = branch.map(toMessage);
+  const shared = data.viewer_can_access_files === false;
+  const messages = branch.map((m) => toMessage(m, shared));
   markHiddenArtifactUpdates(messages);
   return {
     kind: 'chat',
-    title: data.name || data.snapshot_name || 'Claude',
+    title: data.name || data.snapshot_name || (data.is_temporary ? 'Incognito chat' : 'Claude'),
     createdAt: data.created_at ?? null,
     updatedAt: data.updated_at ?? null,
     link: opts.link,
@@ -28,7 +29,7 @@ export function normaliseChat(data: Json, opts: NormaliseChatOptions): Conversat
   };
 }
 
-function toMessage(raw: RawChatMessage): Message {
+function toMessage(raw: RawChatMessage, shared: boolean): Message {
   const role = raw.sender === 'human' ? 'user' : 'assistant';
   const msg = emptyMessage(role, raw.updated_at ?? raw.created_at ?? null);
 
@@ -66,6 +67,20 @@ function toMessage(raw: RawChatMessage): Message {
   for (const b of (raw.content ?? []) as Json[]) {
     const block = toBlock(b, role);
     if (block) msg.blocks.push(block);
+  }
+
+  // Shared chats list no files, only image blocks without a source and a count.
+  if (shared) {
+    const listed = new Set(files.map((f) => f?.file_uuid).filter(Boolean));
+    let accounted = files.length;
+    for (const b of (raw.content ?? []) as Json[]) {
+      if (b?.type !== 'image' || (b.file_uuid && listed.has(b.file_uuid))) continue;
+      const name = String(b.file_name ?? b.name ?? '').trim();
+      msg.notes.push(name ? `> Image: ${name}` : '> Image (not available in shared chats)');
+      accounted++;
+    }
+    const missing = (typeof raw.file_count === 'number' ? raw.file_count : 0) - accounted;
+    if (missing > 0) msg.notes.push(`> ${missing} file${missing === 1 ? '' : 's'} not available in shared chats`);
   }
   return msg;
 }

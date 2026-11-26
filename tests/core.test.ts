@@ -235,7 +235,7 @@ describe('chat rendering', () => {
     expect(md).toContain('# Test\n\n**Created:** 2026-01-01 11:00:00  \n**Updated:** 2026-01-01 12:00:00  \n**Exported:** 2026-01-02 01:00:00  \n**Link:** [https://claude.ai/chat/x](https://claude.ai/chat/x)  \n\n## User:');
     expect(md).toContain('![a.png](https://claude.ai/api/x/preview)');
     expect(md).toContain('````text\npaste ``` inside\n````');
-    expect(md).toContain('> Thinking about it.\n>\n> - Thinking about it.\n> - coffee\n> - **Done**');
+    expect(md).toContain('> Thinking about it.\n>\n> - coffee\n> - **Done**');
     expect(md).not.toContain('full secret thinking');
     expect(md).toContain('**Doc**\n\n````markdown\none two\n````');
     // The first update is hidden; the last shows the final version.
@@ -245,5 +245,75 @@ describe('chat rendering', () => {
     expect(md.match(/coffee\.example/g)).toHaveLength(1);
     expect(md.endsWith('\n')).toBe(true);
     expect(md).not.toMatch(/\n\n\n/);
+  });
+});
+
+describe('shared chats, thinking and incognito titles', () => {
+  const opts = { link: 'https://claude.ai/share/x', orgId: null, conversationId: null };
+  const md = (c: any) => renderMarkdown(normaliseChat(c, opts), { exportedAt: '2026-01-02T00:00:00Z' });
+  const msg = (extra: any) => ({ uuid: 'u1', sender: 'human', parent_message_uuid: null, updated_at: '2026-01-01T10:00:00Z', content: [{ type: 'text', text: 'Hi' }], ...extra });
+
+  it('shows a placeholder for an image the shared chat does not expose', () => {
+    const out = md({
+      name: 'S', viewer_can_access_files: false,
+      chat_messages: [msg({ content: [{ type: 'text', text: 'Hi' }, { type: 'image', source: null, file_uuid: 'f1' }], files: [], file_count: 1 })],
+    });
+    expect(out).toContain('> Image (not available in shared chats)');
+    expect(out).not.toContain('file(s)');
+    expect(out).not.toContain('1 file not available');
+  });
+
+  it('uses the image name when there is one and reports files beyond the listed ones', () => {
+    const out = md({
+      name: 'S', viewer_can_access_files: false,
+      chat_messages: [msg({ content: [{ type: 'image', file_uuid: 'f1', file_name: 'pic.png' }], files: [], file_count: 3 })],
+    });
+    expect(out).toContain('> Image: pic.png');
+    expect(out).toContain('> 2 files not available in shared chats');
+  });
+
+  it('does not render an image twice in normal chats', () => {
+    const out = md({
+      name: 'N',
+      chat_messages: [msg({
+        content: [{ type: 'text', text: 'Hi' }, { type: 'image', file_uuid: 'f1' }],
+        files_v2: [{ file_kind: 'image', file_uuid: 'f1', file_name: 'a.png', preview_url: '/p' }],
+      })],
+    });
+    expect(out.match(/a\.png/g)).toHaveLength(1);
+    expect(out).not.toContain('not available');
+  });
+
+  it('ignores tool_result images', () => {
+    const out = md({
+      name: 'S', viewer_can_access_files: false,
+      chat_messages: [
+        msg({}),
+        { uuid: 'a1', sender: 'assistant', parent_message_uuid: 'u1', content: [{ type: 'tool_result', tool_use_id: 't', name: 'x', content: [{ type: 'image', source: null }] }] },
+      ],
+    });
+    expect(out).not.toContain('Image');
+  });
+
+  it('renders a thinking-only group as one summary line', () => {
+    const out = md({ name: 'T', chat_messages: [msg({ sender: 'assistant', content: [{ type: 'thinking', summaries: [{ summary: 'Pondering.' }] }, { type: 'text', text: 'Answer' }] })] });
+    expect(out).toContain('> Pondering.\n\nAnswer');
+    expect(out).not.toContain('Done');
+  });
+
+  it('lists only tool steps when a group has tools', () => {
+    const out = md({ name: 'T', chat_messages: [msg({ sender: 'assistant', content: [
+      { type: 'thinking', summaries: [{ summary: 'Pondering.' }] },
+      { type: 'tool_use', id: 's', name: 'web_search', input: { query: 'coffee' }, message: 'Searching' },
+      { type: 'tool_result', tool_use_id: 's', name: 'web_search', content: [] },
+    ] })] });
+    expect(out).toContain('> Pondering.\n>\n> - coffee\n> - **Done**');
+  });
+
+  it('titles unnamed temporary chats "Incognito chat"', () => {
+    const conv = (extra: any) => normaliseChat({ name: '', chat_messages: [msg({})], ...extra }, opts);
+    expect(conv({ is_temporary: true }).title).toBe('Incognito chat');
+    expect(conv({ is_temporary: false }).title).toBe('Claude');
+    expect(conv({ is_temporary: true, name: 'Named' }).title).toBe('Named');
   });
 });

@@ -79,6 +79,18 @@ network error, not a claude.ai chat).
 - `public/manifest.json` – the manifest. Permissions: `downloads`, `offscreen`
   and `https://claude.ai/*`.
 
+## Release
+
+Push a tag that matches the manifest version, for example `v1.0.0`. The
+[Release workflow](.github/workflows/release.yml) runs the tests, builds and
+attaches `export-for-claude-<version>.zip` to a GitHub release. That zip is what
+gets uploaded to the Chrome Web Store; the listing texts and dashboard answers
+are in [store/](store/).
+
+## Privacy
+
+No data is collected or sent anywhere except claude.ai. See [PRIVACY.md](PRIVACY.md).
+
 ## License
 
 [MIT](LICENSE)
