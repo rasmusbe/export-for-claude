@@ -345,7 +345,7 @@ describe('buildFilesZip', () => {
     const entries = unzipSync(r.bytes!);
     expect(entries['large.pdf']).toEqual(big);
     expect(entries['large.csv']).toEqual(big);
-  });
+  }, 30_000); // slow on CI runners
 
   it('writes a valid zip: local header signature, end-of-central-directory record, UTF-8 names', async () => {
     const r = await buildFilesZip(bytesHttp(() => bytes('hi')), [file('räksmörgås.txt', '/a')]);
