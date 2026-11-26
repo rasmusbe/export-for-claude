@@ -10,7 +10,7 @@ Upload `export-for-claude-<version>.zip` from the GitHub release for the tag
 
 ## Store listing
 
-- Category: Productivity
+- Category: Productivity › Tools
 - Icon: `public/icons/icon128.png`
 - Screenshots: `store/screenshots/*.png` (1280×800)
 - Homepage: https://github.com/rasmusbe/export-for-claude

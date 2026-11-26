@@ -30,7 +30,7 @@ Export for Claude is an independent project and is not affiliated with or endors
 
 ## Category
 
-Productivity
+Productivity › Tools
 
 ## Language
 
