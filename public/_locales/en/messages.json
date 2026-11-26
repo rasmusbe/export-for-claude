@@ -1,0 +1,170 @@
+{
+  "extName": {
+    "message": "Export for Claude",
+    "description": "Product name"
+  },
+  "extDescription": {
+    "message": "Export the open claude.ai conversation to Markdown, JSON or PDF and download its files as a zip. Everything runs locally.",
+    "description": "Extension description (manifest)"
+  },
+  "popupMarkdown": {
+    "message": "Export Markdown"
+  },
+  "popupJson": {
+    "message": "Export JSON"
+  },
+  "popupPdf": {
+    "message": "Save as PDF"
+  },
+  "popupZip": {
+    "message": "Download files",
+    "description": "Zip button before the files are counted"
+  },
+  "popupZipCount": {
+    "message": "Download files ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "statusFetching": {
+    "message": "Fetching the conversation…"
+  },
+  "statusSaving": {
+    "message": "Saving…"
+  },
+  "statusDone": {
+    "message": "Done: $filename$",
+    "placeholders": {
+      "filename": {
+        "content": "$1",
+        "example": "2026-03-05 Titel.md"
+      }
+    }
+  },
+  "statusDonePartial": {
+    "message": "Done: $filename$. $failed$ of $total$ files could not be fetched (see $missing$).",
+    "placeholders": {
+      "filename": {
+        "content": "$1",
+        "example": "2026-03-05 Titel – filer.zip"
+      },
+      "failed": {
+        "content": "$2",
+        "example": "1"
+      },
+      "total": {
+        "content": "$3",
+        "example": "4"
+      },
+      "missing": {
+        "content": "$4",
+        "example": "saknas.txt"
+      }
+    }
+  },
+  "statusSaveFailed": {
+    "message": "Could not save the file: $reason$",
+    "placeholders": {
+      "reason": {
+        "content": "$1",
+        "example": "Ingen kontakt"
+      }
+    }
+  },
+  "statusFetchingFiles": {
+    "message": "Fetching files… $done$ of $total$",
+    "placeholders": {
+      "done": {
+        "content": "$1",
+        "example": "2"
+      },
+      "total": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "errorNoBackground": {
+    "message": "No connection to the extension's background worker."
+  },
+  "errorNotLoggedIn": {
+    "message": "You don't seem to be logged in to claude.ai."
+  },
+  "errorNotFound": {
+    "message": "The conversation was not found."
+  },
+  "errorRateLimited": {
+    "message": "Too many requests. Wait a moment and try again."
+  },
+  "errorNetwork": {
+    "message": "Network error. Check your connection and try again."
+  },
+  "errorNotAChat": {
+    "message": "This is not a claude.ai chat. Open a conversation first."
+  },
+  "errorUnknown": {
+    "message": "Something went wrong with the export."
+  },
+  "errorUnknownDetail": {
+    "message": "Something went wrong with the export. ($detail$)",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Failed to fetch"
+      }
+    }
+  },
+  "errorNoContentScript": {
+    "message": "Reload the claude.ai tab and try again."
+  },
+  "errorNoFilesFetched": {
+    "message": "No files could be fetched."
+  },
+  "errorNoFiles": {
+    "message": "The conversation has no files to download."
+  },
+  "printNoTab": {
+    "message": "No claude.ai tab specified."
+  },
+  "printFailed": {
+    "message": "Something went wrong: $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Failed to fetch"
+      }
+    }
+  },
+  "zipSuffix": {
+    "message": "files.zip",
+    "description": "Zip file name suffix after the title"
+  },
+  "missingFileName": {
+    "message": "missing.txt",
+    "description": "Name of the list of files that could not be fetched, inside the zip"
+  },
+  "missingHeading": {
+    "message": "These files could not be fetched:"
+  },
+  "reasonNotFound": {
+    "message": "not found"
+  },
+  "reasonNoAccess": {
+    "message": "no access"
+  },
+  "reasonRateLimited": {
+    "message": "rate limited"
+  },
+  "reasonNetwork": {
+    "message": "network error"
+  },
+  "reasonUnknown": {
+    "message": "unknown error"
+  },
+  "errorFileGone": {
+    "message": "The file is no longer available."
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "extName": {
+    "message": "Export for Claude",
+    "description": "Product name"
+  },
+  "extDescription": {
+    "message": "Exportera den öppna claude.ai-konversationen till Markdown, JSON eller PDF och ladda ner dess filer som zip. Allt sker lokalt.",
+    "description": "Extension description (manifest)"
+  },
+  "popupMarkdown": {
+    "message": "Exportera Markdown"
+  },
+  "popupJson": {
+    "message": "Exportera JSON"
+  },
+  "popupPdf": {
+    "message": "Spara som PDF"
+  },
+  "popupZip": {
+    "message": "Ladda ner filer",
+    "description": "Zip button before the files are counted"
+  },
+  "popupZipCount": {
+    "message": "Ladda ner filer ($count$)",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "statusFetching": {
+    "message": "Hämtar konversationen…"
+  },
+  "statusSaving": {
+    "message": "Sparar…"
+  },
+  "statusDone": {
+    "message": "Klart: $filename$",
+    "placeholders": {
+      "filename": {
+        "content": "$1",
+        "example": "2026-03-05 Titel.md"
+      }
+    }
+  },
+  "statusDonePartial": {
+    "message": "Klart: $filename$. $failed$ av $total$ filer kunde inte hämtas (se $missing$).",
+    "placeholders": {
+      "filename": {
+        "content": "$1",
+        "example": "2026-03-05 Titel – filer.zip"
+      },
+      "failed": {
+        "content": "$2",
+        "example": "1"
+      },
+      "total": {
+        "content": "$3",
+        "example": "4"
+      },
+      "missing": {
+        "content": "$4",
+        "example": "saknas.txt"
+      }
+    }
+  },
+  "statusSaveFailed": {
+    "message": "Kunde inte spara filen: $reason$",
+    "placeholders": {
+      "reason": {
+        "content": "$1",
+        "example": "Ingen kontakt"
+      }
+    }
+  },
+  "statusFetchingFiles": {
+    "message": "Hämtar filer… $done$ av $total$",
+    "placeholders": {
+      "done": {
+        "content": "$1",
+        "example": "2"
+      },
+      "total": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "errorNoBackground": {
+    "message": "Ingen kontakt med tilläggets bakgrund."
+  },
+  "errorNotLoggedIn": {
+    "message": "Du verkar inte vara inloggad på claude.ai."
+  },
+  "errorNotFound": {
+    "message": "Konversationen hittades inte."
+  },
+  "errorRateLimited": {
+    "message": "För många förfrågningar. Vänta en stund och försök igen."
+  },
+  "errorNetwork": {
+    "message": "Nätverksfel. Kontrollera anslutningen och försök igen."
+  },
+  "errorNotAChat": {
+    "message": "Det här är inte en claude.ai-chatt. Öppna en konversation först."
+  },
+  "errorUnknown": {
+    "message": "Något gick fel vid exporten."
+  },
+  "errorUnknownDetail": {
+    "message": "Något gick fel vid exporten. ($detail$)",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Failed to fetch"
+      }
+    }
+  },
+  "errorNoContentScript": {
+    "message": "Ladda om claude.ai-fliken och försök igen."
+  },
+  "errorNoFilesFetched": {
+    "message": "Inga filer kunde hämtas."
+  },
+  "errorNoFiles": {
+    "message": "Konversationen har inga filer att ladda ner."
+  },
+  "printNoTab": {
+    "message": "Ingen claude.ai-flik angiven."
+  },
+  "printFailed": {
+    "message": "Något gick fel: $detail$",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Failed to fetch"
+      }
+    }
+  },
+  "zipSuffix": {
+    "message": "filer.zip",
+    "description": "Zip file name suffix after the title"
+  },
+  "missingFileName": {
+    "message": "saknas.txt",
+    "description": "Name of the list of files that could not be fetched, inside the zip"
+  },
+  "missingHeading": {
+    "message": "Följande filer kunde inte hämtas:"
+  },
+  "reasonNotFound": {
+    "message": "filen hittades inte"
+  },
+  "reasonNoAccess": {
+    "message": "ingen behörighet"
+  },
+  "reasonRateLimited": {
+    "message": "för många förfrågningar"
+  },
+  "reasonNetwork": {
+    "message": "nätverksfel"
+  },
+  "reasonUnknown": {
+    "message": "okänt fel"
+  },
+  "errorFileGone": {
+    "message": "Filen finns inte kvar."
+  }
+}
